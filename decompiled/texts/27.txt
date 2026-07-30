@@ -1,0 +1,1 @@
+Drag the telescope around to see how the three main types of spectra (continuous, absorption, and emission) are obtained from a cold, thin gas cloud and an incandescent lightbulb in space.
