@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Three Views Spectrum Demonstrator</title>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="foundation/klunl_favicon_32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="foundation/klunl_favicon_180.png">
+
+  <!-- Shared KL-UNL foundation (copied in unchanged) -->
+  <link href="foundation/kl-unl.css" type="text/css" rel="stylesheet" media="all">
+  <!-- Sim-specific styles only -->
+  <link href="styles/styles.css" type="text/css" rel="stylesheet" media="all">
+</head>
+<body>
+  <a class="sr-only sr-only-focusable" href="#main-content">Skip to main content</a>
+
+  <main class="app-shell" id="main-content">
+
+    <!-- Title + Reset / About come from the shared component, keyed by sim-id -->
+    <kl-unl-masthead sim-id="threeviewsspectra" json-url="foundation/contents.json"></kl-unl-masthead>
+
+    <div class="app-layout tvs-layout">
+
+      <!-- =========================== SPECTROMETER =========================== -->
+      <section class="panel tvs-panel tvs-panel--spectrometer" aria-labelledby="spec-heading">
+        <h2 class="panel__heading" id="spec-heading">Spectrometer</h2>
+
+        <div class="panel__canvas-wrap tvs-spec-wrap">
+          <!-- All art below is the ORIGINAL exported Flash vector art, reused as-is
+               and placed at the original stage coordinates (see CONVERSION_NOTES.md). -->
+          <svg class="tvs-spec-svg" viewBox="7.65 7.65 395.09 147.68"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-labelledby="spec-svg-label" aria-describedby="spec-svg-desc">
+            <title id="spec-svg-label">Spectrometer display</title>
+
+            <!-- instrument case (Symbol 3) -->
+            <image href="assets/spectrometer-case.svg" xlink:href="assets/spectrometer-case.svg"
+                   x="9.65" y="9.65" width="391.088" height="143.676" preserveAspectRatio="none"></image>
+            <!-- lighter face plate at 75% alpha (Symbol 5) -->
+            <image href="assets/spectrometer-face.svg" xlink:href="assets/spectrometer-face.svg"
+                   x="9.65" y="9.65" width="391.088" height="143.676" opacity="0.75"
+                   preserveAspectRatio="none"></image>
+            <!-- screws + name plate (Symbol 6) -->
+            <image href="assets/spectrometer-trim.svg" xlink:href="assets/spectrometer-trim.svg"
+                   x="16.734" y="14.731" width="380.278" height="133.545" preserveAspectRatio="none"></image>
+
+            <!-- Instrument wordmark. Real text (not baked into the art) so it scales and
+                 can be read; recoloured to white for contrast - see ACCESSIBILITY.md. -->
+            <text class="tvs-spec-wordmark" x="202.5" y="43.6" text-anchor="middle"
+                  textLength="200" lengthAdjust="spacing">SPECTROMETER</text>
+
+            <!-- black screen (main-timeline shape) -->
+            <image href="assets/spectrometer-screen.svg" xlink:href="assets/spectrometer-screen.svg"
+                   x="40.5" y="62.45" width="335.35" height="58.15" preserveAspectRatio="none"></image>
+
+            <!-- The three spectra, stacked exactly as in the original spectrometerMC:
+                 absorption (bottom), continuous, emission (top). Opacity is driven by
+                 the ported intensity logic. -->
+            <image id="spectrum-absorption"
+                   href="assets/spectrum-absorption.svg" xlink:href="assets/spectrum-absorption.svg"
+                   x="43.449" y="64.250" width="330.146" height="53.819"
+                   opacity="0" preserveAspectRatio="none"></image>
+            <image id="spectrum-continuous"
+                   href="assets/spectrum-continuous.svg" xlink:href="assets/spectrum-continuous.svg"
+                   x="43.449" y="64.250" width="330.146" height="53.819"
+                   opacity="0" preserveAspectRatio="none"></image>
+            <image id="spectrum-emission"
+                   href="assets/spectrum-emission.svg" xlink:href="assets/spectrum-emission.svg"
+                   x="45.850" y="66.650" width="325.344" height="49.019"
+                   opacity="0" preserveAspectRatio="none"></image>
+          </svg>
+          <p id="spec-svg-desc" class="sr-only"></p>
+        </div>
+
+        <p class="tvs-readout">
+          <span class="tvs-readout__label">Currently showing:</span>
+          <span class="tvs-readout__value" id="spectrum-name"></span>
+        </p>
+      </section>
+
+      <!-- ============================== GUIDE ============================== -->
+      <section class="panel tvs-panel tvs-panel--guide" aria-labelledby="guide-heading">
+        <h2 class="panel__heading" id="guide-heading">How to Use This Demonstrator</h2>
+        <p class="panel__help tvs-guide">Drag the telescope around to see how the three main types of spectra (continuous, absorption, and emission) are obtained from a cold, thin gas cloud and an incandescent lightbulb in space.</p>
+        <p class="panel__help tvs-guide">The telescope can also be moved from the keyboard: use the <strong>Telescope position along the path</strong> slider below the space view, or click the telescope once and then use the arrow keys.</p>
+      </section>
+
+      <!-- ============================ SPACE VIEW ============================ -->
+      <section class="panel tvs-panel tvs-panel--sky" aria-labelledby="sky-heading">
+        <h2 class="panel__heading" id="sky-heading">Space View</h2>
+
+        <div class="panel__canvas-wrap tvs-sky-wrap">
+          <svg id="sky-svg" class="tvs-sky-svg" viewBox="115 140 585 360"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-labelledby="sky-svg-label" aria-describedby="sky-svg-desc">
+            <title id="sky-svg-label">Space view: the telescope, a gas cloud and a light bulb</title>
+
+            <rect x="115" y="140" width="585" height="360" fill="#000000"></rect>
+
+            <!-- cold, thin gas cloud: three exported layers, each at 66% alpha
+                 (the alpha is per layer in the original, not on the group) -->
+            <image href="assets/gas-cloud-back.svg" xlink:href="assets/gas-cloud-back.svg"
+                   x="320.720" y="330.870" width="120.000" height="116.502"
+                   opacity="0.66015625" preserveAspectRatio="none"></image>
+            <image href="assets/gas-cloud-mid.svg" xlink:href="assets/gas-cloud-mid.svg"
+                   x="355.060" y="343.300" width="75.394" height="95.811"
+                   opacity="0.66015625" preserveAspectRatio="none"></image>
+            <image href="assets/gas-cloud-front.svg" xlink:href="assets/gas-cloud-front.svg"
+                   x="328.900" y="346.350" width="64.192" height="69.893"
+                   opacity="0.66015625" preserveAspectRatio="none"></image>
+
+            <!-- incandescent light bulb -->
+            <image href="assets/lightbulb.svg" xlink:href="assets/lightbulb.svg"
+                   x="534.800" y="318.550" width="77.479" height="129.478"
+                   preserveAspectRatio="none"></image>
+
+            <!-- the draggable telescope -->
+            <g id="telescope-group" class="tvs-telescope">
+              <rect id="telescope-focus-ring" class="tvs-focus-ring"
+                    x="-52.85" y="-29.65" width="105.1" height="49.9" rx="4"></rect>
+              <image href="assets/telescope.svg" xlink:href="assets/telescope.svg"
+                     x="-48.85" y="-25.65" width="97.1" height="41.9"></image>
+              <!-- transparent grab/tap target (>=44 CSS px at every supported width) -->
+              <rect id="telescope-hit" class="tvs-hit"
+                    x="-48.85" y="-25.65" width="97.1" height="41.9" fill="transparent"></rect>
+            </g>
+
+            <!-- "ghost" telescope: shows the free position on the track while dragging -->
+            <g id="ghost-group" class="tvs-ghost" opacity="0" visibility="hidden">
+              <image href="assets/telescope.svg" xlink:href="assets/telescope.svg"
+                     x="-48.85" y="-25.65" width="97.1" height="41.9"></image>
+            </g>
+          </svg>
+          <p id="sky-svg-desc" class="sr-only"></p>
+        </div>
+
+        <fieldset class="control-fieldset tvs-fieldset">
+          <legend class="control-fieldset__legend">Telescope</legend>
+          <div class="tvs-slider-row">
+            <label class="control-row__label tvs-slider-label" for="telescope-position">Position along the path</label>
+            <span class="tvs-slider-end" aria-hidden="true">Start</span>
+            <input type="range" id="telescope-position" class="control-row__slider tvs-slider"
+                   min="0" max="120" step="1" value="59">
+            <span class="tvs-slider-end" aria-hidden="true">End</span>
+          </div>
+        </fieldset>
+      </section>
+
+    </div><!-- /.app-layout -->
+
+    <!-- Screen-reader status: announces state changes on commit, with units. -->
+    <p id="sr-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+  </main>
+
+  <!-- Shared equation helper from the foundation (hook redefined in simulation.js) -->
+  <script src="foundation/kl-unl.js"></script>
+  <!-- Masthead custom element -->
+  <script src="foundation/kl-unl-masthead.js" defer></script>
+  <!-- Simulation logic -->
+  <script src="simulation.js" defer></script>
+</body>
+</html>

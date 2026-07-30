@@ -1,0 +1,232 @@
+/* =============================================================================
+ * Three Views Spectrum Demonstrator - sim-specific styles ONLY.
+ *
+ * The palette, .panel / .control-* classes and the responsive grid all come
+ * from the KL-UNL foundation (foundation/kl-unl.css). Nothing in this file
+ * edits or forks the foundation; everything here is additive and namespaced
+ * with the "tvs-" prefix.
+ * ========================================================================== */
+
+/* ---- Comfortable, zoomable base type (rem, so it tracks browser settings) - */
+.app-shell {
+  font-size:   1.125rem;
+  line-height: 1.45;
+}
+
+/* =============================== LAYOUT =================================== */
+/* Mirrors the original Flash arrangement: spectrometer top-left, instructions
+   top-right, the space view across the full width underneath.                */
+.tvs-layout {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap:         0.75rem;
+  align-items: stretch;
+  padding:     0.5rem;
+}
+
+.tvs-panel {
+  display:       flex;
+  flex-direction: column;
+  border:        var(--border-width, 1px) var(--border-style, solid) var(--border-color, #767676);
+  border-radius: 6px;
+  overflow:      hidden;
+}
+
+.tvs-panel--sky {
+  grid-column: 1 / -1;
+}
+
+.panel__heading {
+  font-size:     1.15rem;
+  padding:       0.6rem 1rem;
+  border-bottom: var(--border-width, 1px) var(--border-style, solid) var(--border-color, #767676);
+  background:    #f4f6f8;
+}
+
+/* =========================== SPECTROMETER PANEL =========================== */
+.tvs-spec-wrap {
+  padding:   1rem;
+  flex:      1 1 auto;
+  display:   flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tvs-spec-svg {
+  display:   block;
+  width:     100%;
+  height:    auto;
+  max-width: 34rem;
+}
+
+/* Instrument wordmark: white on the dark red name plate (>= 5:1 contrast).
+   textLength keeps the wordmark the same width on every OS/font stack.       */
+.tvs-spec-wordmark {
+  font-family: Arial, Helvetica, "Liberation Sans", sans-serif;
+  font-size:   23.7px;
+  fill:        #ffffff;
+}
+
+/* Label / value readout under the instrument, aligned on a shared baseline.  */
+.tvs-readout {
+  display:       flex;
+  flex-wrap:     wrap;
+  align-items:   baseline;
+  gap:           0.5rem;
+  margin:        0;
+  padding:       0.75rem 1rem 1rem;
+  border-top:    var(--border-width, 1px) var(--border-style, solid) #e2e6ea;
+}
+
+.tvs-readout__label {
+  font-weight: bold;
+}
+
+.tvs-readout__value {
+  font-weight: normal;
+}
+
+/* ============================== GUIDE PANEL =============================== */
+.tvs-guide {
+  margin:      0.9rem 1rem 0;
+  font-size:   1.125rem;
+  line-height: 1.5;
+}
+
+.tvs-guide:last-of-type {
+  margin-bottom: 1rem;
+}
+
+/* ============================ SPACE VIEW PANEL ============================ */
+.tvs-sky-wrap {
+  padding:         1rem 1rem 0;
+  display:         flex;
+  justify-content: center;
+}
+
+.tvs-sky-svg {
+  display:       block;
+  width:         100%;
+  height:        auto;
+  max-width:     50rem;
+  border-radius: 4px;
+  /* Only the telescope grab target below takes pointer input. */
+  pointer-events: none;
+  /* Dragging the telescope must never scroll or zoom the page. */
+  touch-action:  none;
+}
+
+/* The transparent grab/tap target that sits on top of the telescope art.     */
+.tvs-hit {
+  pointer-events: auto;
+  cursor:         grab;
+}
+
+.tvs-sky-svg.is-dragging .tvs-hit {
+  cursor: grabbing;
+}
+
+/* Visible focus indication ON the telescope itself, shown whenever the
+   telescope position control has keyboard focus (see ACCESSIBILITY.md).      */
+.tvs-focus-ring {
+  fill:           none;
+  stroke:         var(--button-outline-color, #ffbc00);
+  stroke-width:   2.5;
+  visibility:     hidden;
+}
+
+.tvs-sky-svg.is-focused .tvs-focus-ring {
+  visibility: visible;
+}
+
+/* ============================== CONTROLS ================================== */
+.tvs-fieldset {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.control-fieldset__legend {
+  font-size: 1.125rem;
+}
+
+/* Label above; Start --- [range] --- End on one aligned row.                 */
+.tvs-slider-row {
+  display:               grid;
+  grid-template-columns: auto 1fr auto;
+  align-items:           center;
+  gap:                   0.4rem 0.7rem;
+}
+
+.tvs-slider-label {
+  grid-column: 1 / -1;
+  font-size:   1.125rem;
+}
+
+.tvs-slider-end {
+  font-size: 1rem;
+  color:     #33383d;
+}
+
+/* Native range input, restyled only in accent colour and hit size. It keeps
+   all of its built-in keyboard behaviour (arrows / Page / Home / End).       */
+.tvs-slider {
+  width:        100%;
+  min-height:   2.75rem;
+  accent-color: var(--button-background-color, #005a9c);
+  cursor:       pointer;
+}
+
+/* ================== RESPONSIVE: desktop -> iPad -> phone ================== */
+@media (max-width: 56rem) {
+  /* The foundation already collapses .app-layout to one column here; keep the
+     panels stacked in reading order and let the artwork use the full width.  */
+  .tvs-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Stacked order on tablet/phone: the space view (what you operate) first,
+     then the spectrometer (the result), then the instructions. */
+  .tvs-panel--sky {
+    grid-column: auto;
+    order:       1;
+  }
+
+  .tvs-panel--spectrometer {
+    order: 2;
+  }
+
+  .tvs-panel--guide {
+    order: 3;
+  }
+
+  /* The foundation makes .control-row__slider span its whole row below 56rem;
+     this slider is flanked by its Start/End markers, so keep the three on one
+     line instead. (Additive override in the sim's own stylesheet - the
+     foundation file itself is untouched.) */
+  .tvs-slider-row .control-row__slider {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 30rem) {
+  .app-shell {
+    font-size: 1.0625rem;
+  }
+
+  .tvs-spec-wrap,
+  .tvs-sky-wrap {
+    padding-left:  0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .tvs-slider-row {
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
+/* No animation exists in this demonstrator, so there is nothing to stop; the
+   rule is kept so any future transition also honours the user's preference.  */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
