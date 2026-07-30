@@ -23,6 +23,68 @@
 
     <div class="app-layout tvs-layout">
 
+      <!-- ============================ SPACE VIEW ============================ -->
+      <section class="panel tvs-panel tvs-panel--sky" aria-labelledby="sky-heading">
+        <h2 class="panel__heading" id="sky-heading">Space View</h2>
+
+        <div class="panel__canvas-wrap tvs-sky-wrap">
+          <svg id="sky-svg" class="tvs-sky-svg" viewBox="115 140 585 360"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-labelledby="sky-svg-label" aria-describedby="sky-svg-desc">
+            <title id="sky-svg-label">Space view: the telescope, a gas cloud and a light bulb</title>
+
+            <rect x="115" y="140" width="585" height="360" fill="#000000"></rect>
+
+            <!-- cold, thin gas cloud: three exported layers, each at 66% alpha
+                 (the alpha is per layer in the original, not on the group) -->
+            <image href="assets/gas-cloud-back.svg" xlink:href="assets/gas-cloud-back.svg"
+                   x="320.720" y="330.870" width="120.000" height="116.502"
+                   opacity="0.66015625" preserveAspectRatio="none"></image>
+            <image href="assets/gas-cloud-mid.svg" xlink:href="assets/gas-cloud-mid.svg"
+                   x="355.060" y="343.300" width="75.394" height="95.811"
+                   opacity="0.66015625" preserveAspectRatio="none"></image>
+            <image href="assets/gas-cloud-front.svg" xlink:href="assets/gas-cloud-front.svg"
+                   x="328.900" y="346.350" width="64.192" height="69.893"
+                   opacity="0.66015625" preserveAspectRatio="none"></image>
+
+            <!-- incandescent light bulb -->
+            <image href="assets/lightbulb.svg" xlink:href="assets/lightbulb.svg"
+                   x="534.800" y="318.550" width="77.479" height="129.478"
+                   preserveAspectRatio="none"></image>
+
+            <!-- the draggable telescope -->
+            <g id="telescope-group" class="tvs-telescope">
+              <rect id="telescope-focus-ring" class="tvs-focus-ring"
+                    x="-52.85" y="-29.65" width="105.1" height="49.9" rx="4"></rect>
+              <image href="assets/telescope.svg" xlink:href="assets/telescope.svg"
+                     x="-48.85" y="-25.65" width="97.1" height="41.9"></image>
+              <!-- Transparent grab/tap target, deliberately larger than the
+                   artwork so it stays >=44 CSS px even on a phone. -->
+              <rect id="telescope-hit" class="tvs-hit"
+                    x="-55" y="-40" width="110" height="72" fill="transparent"></rect>
+            </g>
+
+            <!-- "ghost" telescope: shows the free position on the track while dragging -->
+            <g id="ghost-group" class="tvs-ghost" opacity="0" visibility="hidden">
+              <image href="assets/telescope.svg" xlink:href="assets/telescope.svg"
+                     x="-48.85" y="-25.65" width="97.1" height="41.9"></image>
+            </g>
+          </svg>
+          <p id="sky-svg-desc" class="sr-only"></p>
+        </div>
+
+        <fieldset class="control-fieldset tvs-fieldset">
+          <legend class="control-fieldset__legend">Telescope</legend>
+          <div class="tvs-slider-row">
+            <label class="control-row__label tvs-slider-label" for="telescope-position">Position along the path</label>
+            <span class="tvs-slider-end" aria-hidden="true">Start</span>
+            <input type="range" id="telescope-position" class="control-row__slider tvs-slider"
+                   min="0" max="120" step="1" value="59">
+            <span class="tvs-slider-end" aria-hidden="true">End</span>
+          </div>
+        </fieldset>
+      </section>
+
       <!-- =========================== SPECTROMETER =========================== -->
       <section class="panel tvs-panel tvs-panel--spectrometer" aria-labelledby="spec-heading">
         <h2 class="panel__heading" id="spec-heading">Spectrometer</h2>
@@ -78,74 +140,6 @@
           <span class="tvs-readout__label">Currently showing:</span>
           <span class="tvs-readout__value" id="spectrum-name"></span>
         </p>
-      </section>
-
-      <!-- ============================== GUIDE ============================== -->
-      <section class="panel tvs-panel tvs-panel--guide" aria-labelledby="guide-heading">
-        <h2 class="panel__heading" id="guide-heading">How to Use This Demonstrator</h2>
-        <p class="panel__help tvs-guide">Drag the telescope around to see how the three main types of spectra (continuous, absorption, and emission) are obtained from a cold, thin gas cloud and an incandescent lightbulb in space.</p>
-        <p class="panel__help tvs-guide">The telescope can also be moved from the keyboard: use the <strong>Telescope position along the path</strong> slider below the space view, or click the telescope once and then use the arrow keys.</p>
-      </section>
-
-      <!-- ============================ SPACE VIEW ============================ -->
-      <section class="panel tvs-panel tvs-panel--sky" aria-labelledby="sky-heading">
-        <h2 class="panel__heading" id="sky-heading">Space View</h2>
-
-        <div class="panel__canvas-wrap tvs-sky-wrap">
-          <svg id="sky-svg" class="tvs-sky-svg" viewBox="115 140 585 360"
-               xmlns="http://www.w3.org/2000/svg"
-               role="img" aria-labelledby="sky-svg-label" aria-describedby="sky-svg-desc">
-            <title id="sky-svg-label">Space view: the telescope, a gas cloud and a light bulb</title>
-
-            <rect x="115" y="140" width="585" height="360" fill="#000000"></rect>
-
-            <!-- cold, thin gas cloud: three exported layers, each at 66% alpha
-                 (the alpha is per layer in the original, not on the group) -->
-            <image href="assets/gas-cloud-back.svg" xlink:href="assets/gas-cloud-back.svg"
-                   x="320.720" y="330.870" width="120.000" height="116.502"
-                   opacity="0.66015625" preserveAspectRatio="none"></image>
-            <image href="assets/gas-cloud-mid.svg" xlink:href="assets/gas-cloud-mid.svg"
-                   x="355.060" y="343.300" width="75.394" height="95.811"
-                   opacity="0.66015625" preserveAspectRatio="none"></image>
-            <image href="assets/gas-cloud-front.svg" xlink:href="assets/gas-cloud-front.svg"
-                   x="328.900" y="346.350" width="64.192" height="69.893"
-                   opacity="0.66015625" preserveAspectRatio="none"></image>
-
-            <!-- incandescent light bulb -->
-            <image href="assets/lightbulb.svg" xlink:href="assets/lightbulb.svg"
-                   x="534.800" y="318.550" width="77.479" height="129.478"
-                   preserveAspectRatio="none"></image>
-
-            <!-- the draggable telescope -->
-            <g id="telescope-group" class="tvs-telescope">
-              <rect id="telescope-focus-ring" class="tvs-focus-ring"
-                    x="-52.85" y="-29.65" width="105.1" height="49.9" rx="4"></rect>
-              <image href="assets/telescope.svg" xlink:href="assets/telescope.svg"
-                     x="-48.85" y="-25.65" width="97.1" height="41.9"></image>
-              <!-- transparent grab/tap target (>=44 CSS px at every supported width) -->
-              <rect id="telescope-hit" class="tvs-hit"
-                    x="-48.85" y="-25.65" width="97.1" height="41.9" fill="transparent"></rect>
-            </g>
-
-            <!-- "ghost" telescope: shows the free position on the track while dragging -->
-            <g id="ghost-group" class="tvs-ghost" opacity="0" visibility="hidden">
-              <image href="assets/telescope.svg" xlink:href="assets/telescope.svg"
-                     x="-48.85" y="-25.65" width="97.1" height="41.9"></image>
-            </g>
-          </svg>
-          <p id="sky-svg-desc" class="sr-only"></p>
-        </div>
-
-        <fieldset class="control-fieldset tvs-fieldset">
-          <legend class="control-fieldset__legend">Telescope</legend>
-          <div class="tvs-slider-row">
-            <label class="control-row__label tvs-slider-label" for="telescope-position">Position along the path</label>
-            <span class="tvs-slider-end" aria-hidden="true">Start</span>
-            <input type="range" id="telescope-position" class="control-row__slider tvs-slider"
-                   min="0" max="120" step="1" value="59">
-            <span class="tvs-slider-end" aria-hidden="true">End</span>
-          </div>
-        </fieldset>
       </section>
 
     </div><!-- /.app-layout -->

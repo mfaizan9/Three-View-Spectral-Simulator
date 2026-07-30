@@ -14,10 +14,11 @@
 }
 
 /* =============================== LAYOUT =================================== */
-/* Mirrors the original Flash arrangement: spectrometer top-left, instructions
-   top-right, the space view across the full width underneath.                */
+/* Space view and spectrometer sit side by side so the whole demonstrator fits
+   on one screen at default zoom. The original's on-screen instruction text now
+   lives in the masthead Help dialog (see CONVERSION_NOTES.md).                */
 .tvs-layout {
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap:         0.75rem;
   align-items: stretch;
   padding:     0.5rem;
@@ -31,20 +32,16 @@
   overflow:      hidden;
 }
 
-.tvs-panel--sky {
-  grid-column: 1 / -1;
-}
-
 .panel__heading {
   font-size:     1.15rem;
-  padding:       0.6rem 1rem;
+  padding:       0.5rem 0.9rem;
   border-bottom: var(--border-width, 1px) var(--border-style, solid) var(--border-color, #767676);
   background:    #f4f6f8;
 }
 
 /* =========================== SPECTROMETER PANEL =========================== */
 .tvs-spec-wrap {
-  padding:   1rem;
+  padding:   0.75rem;
   flex:      1 1 auto;
   display:   flex;
   align-items: center;
@@ -73,7 +70,7 @@
   align-items:   baseline;
   gap:           0.5rem;
   margin:        0;
-  padding:       0.75rem 1rem 1rem;
+  padding:       0.6rem 0.9rem 0.7rem;
   border-top:    var(--border-width, 1px) var(--border-style, solid) #e2e6ea;
 }
 
@@ -85,20 +82,9 @@
   font-weight: normal;
 }
 
-/* ============================== GUIDE PANEL =============================== */
-.tvs-guide {
-  margin:      0.9rem 1rem 0;
-  font-size:   1.125rem;
-  line-height: 1.5;
-}
-
-.tvs-guide:last-of-type {
-  margin-bottom: 1rem;
-}
-
 /* ============================ SPACE VIEW PANEL ============================ */
 .tvs-sky-wrap {
-  padding:         1rem 1rem 0;
+  padding:         0.75rem 0.75rem 0;
   display:         flex;
   justify-content: center;
 }
@@ -107,7 +93,10 @@
   display:       block;
   width:         100%;
   height:        auto;
-  max-width:     50rem;
+  /* The viewBox gives the SVG a 585:360 aspect ratio, so capping its width also
+     caps its height: this keeps the whole page inside a short viewport at
+     default zoom without ever letterboxing or distorting the diagram. */
+  max-width:     max(18rem, calc((100vh - 15rem) * 1.625));
   border-radius: 4px;
   /* Only the telescope grab target below takes pointer input. */
   pointer-events: none;
@@ -140,7 +129,7 @@
 
 /* ============================== CONTROLS ================================== */
 .tvs-fieldset {
-  padding: 0.75rem 1rem 1rem;
+  padding: 0.6rem 0.9rem 0.7rem;
 }
 
 .control-fieldset__legend {
@@ -176,25 +165,15 @@
 
 /* ================== RESPONSIVE: desktop -> iPad -> phone ================== */
 @media (max-width: 56rem) {
-  /* The foundation already collapses .app-layout to one column here; keep the
-     panels stacked in reading order and let the artwork use the full width.  */
+  /* The foundation already collapses .app-layout to one column here. DOM order
+     is space view then spectrometer, so the stack needs no re-ordering.       */
   .tvs-layout {
     grid-template-columns: 1fr;
   }
 
-  /* Stacked order on tablet/phone: the space view (what you operate) first,
-     then the spectrometer (the result), then the instructions. */
-  .tvs-panel--sky {
-    grid-column: auto;
-    order:       1;
-  }
-
-  .tvs-panel--spectrometer {
-    order: 2;
-  }
-
-  .tvs-panel--guide {
-    order: 3;
+  /* Stacked, the diagram may use the full column height it needs. */
+  .tvs-sky-svg {
+    max-width: 50rem;
   }
 
   /* The foundation makes .control-row__slider span its whole row below 56rem;

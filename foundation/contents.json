@@ -1576,7 +1576,7 @@
     "masthead": {
       "help": {
         "title": "Help and Instructions",
-        "content": "<p>This demonstrator shows how different spectra can arise from a light bulb (a thermal source) and a cold, thin gas cloud. The spectrometer shows emission, absorption, or continuous spectra based on where the draggable telescope is pointed.</p>"
+        "content": "<p>Drag the telescope around to see how the three main types of spectra (continuous, absorption, and emission) are obtained from a cold, thin gas cloud and an incandescent lightbulb in space.</p><p>This demonstrator shows how different spectra can arise from a light bulb (a thermal source) and a cold, thin gas cloud. The spectrometer shows emission, absorption, or continuous spectra based on where the draggable telescope is pointed.</p><p>The telescope can also be moved from the keyboard: use the <strong>Position along the path</strong> slider beside the space view, or click the telescope once and then use the arrow keys.</p>"
       },
       "about": {
         "title": "About this Demonstrator",
