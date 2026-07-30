@@ -14,16 +14,15 @@ Everything below is implemented in `index.html`, `styles/styles.css` and
   labelled by its own `<h2>` via `aria-labelledby`. Heading levels do not skip.
 * A "Skip to main content" link (`.sr-only .sr-only-focusable`) is the first
   focusable element.
-* DOM order is **spectrometer → instructions → space view**, which matches the
-  visual order on desktop and tablet-landscape.
-* **Below 56 rem the panels are re-ordered visually with CSS `order` to space view
-  → spectrometer → instructions**, so the thing the user operates comes first on a
-  phone. This is a deliberate visual reorder of three independent, separately
-  headed `<section>` landmarks; the DOM/reading sequence itself is unchanged, and
-  because the space view holds the only tab stop in the layout, focus order still
-  runs straight down the page with no visible jump. Screen-reader users navigate
-  these by heading or landmark, and each panel is self-contained, so no
-  information depends on which of the three is encountered first.
+* DOM order is **space view → telescope control → spectrometer**, and it matches
+  the visual order at every width: side by side (left to right) on desktop and
+  tablet-landscape, stacked (top to bottom) below 56 rem. No CSS re-ordering is
+  used anywhere, so the reading sequence, the focus order and the visual order
+  never disagree.
+* The original's on-screen instruction paragraph now lives in the masthead
+  **Help** dialog, verbatim, rather than in a page panel — see CONVERSION_NOTES.md.
+  The masthead labels that button "Review Help Guide" in green until it has been
+  opened, so it is discoverable rather than buried.
 
 ---
 
@@ -145,10 +144,15 @@ restoration; nothing here interferes with it.
 * Both diagrams are vector SVG scaled by their `viewBox` — they stay sharp at any
   zoom instead of blurring, and the `SPECTROMETER` wordmark scales with them as
   real text.
-* Verified with no horizontal scrolling and no clipping or overlap at 1100 px,
-  768 px (iPad portrait), 550 px (≈ 200 % zoom of a 1100 px window) and 390 px
-  (phone portrait). At 390 px `document.documentElement.scrollWidth` equals the
-  viewport width exactly.
+* Verified with no horizontal scrolling and no clipping or overlap at 1440 px,
+  1280 × 650, 1145 px, 768 px (iPad portrait), 520 px (≈ 200 % zoom of a 1040 px
+  window) and 390 px (phone portrait). At both 1145 px and 390 px
+  `document.documentElement.scrollWidth` equals the viewport width exactly.
+* The two-column layout is sized so the whole demonstrator fits on one screen at
+  default zoom (it ends about 545 px down in a 1280 × 650 viewport); the space
+  view also carries a `100vh`-derived width cap so it still fits on shorter
+  viewports, and the layout reflows to a scrollable single column at 200 % zoom
+  rather than clipping.
 * **No canvas-baked text exists**, so nothing had to stay behind at a fixed size.
 
 ---
@@ -158,10 +162,13 @@ restoration; nothing here interferes with it.
 * Pointer Events give mouse, pen and touch one code path.
 * `touch-action: none` on the space-view SVG stops a telescope drag from scrolling
   or zooming the page; the rest of the page scrolls normally.
-* The telescope's transparent hit rectangle is the full 97 × 42 stage units of the
-  artwork, which is comfortably over 44 CSS px at every supported width. The
-  slider is `min-height: 2.75rem` and the masthead buttons come from the
-  foundation's `.button` sizing.
+* The telescope's transparent hit rectangle is **110 × 72 stage units,
+  deliberately larger than the 97 × 42 artwork**, so that it stays at or above
+  44 × 44 CSS px even when the diagram is at its narrowest (phone portrait,
+  ≈ 360 px wide, where the artwork alone would only be about 60 × 26 px).
+  Measured 117 × 162 px at a 1145 px viewport. The slider is
+  `min-height: 2.75rem` and the masthead buttons come from the foundation's
+  `.button` sizing.
 * Nothing is revealed by `:hover` only.
 
 ---
@@ -189,7 +196,8 @@ in speech carry their units in `aria-valuetext` and the live region.
 | Change | Reason |
 | --- | --- |
 | `SPECTROMETER` wordmark recoloured `#d36488` → `#ffffff` | 2.5 : 1 failed WCAG 1.4.3; white reaches ≥ 5.1 : 1 (WCAG 1.4.3). |
-| Instruction text moved from white-on-black onto a KL-UNL panel | Foundation palette and template usage (Goal B). |
+| Instruction paragraph moved from the page into the masthead Help dialog | Requested, so the demonstrator fits on one screen at default zoom. Kept verbatim; the Help button self-advertises until read. |
+| Telescope hit rectangle enlarged to 110 × 72 stage units | Keeps the drag target ≥ 44 × 44 CSS px down to phone-portrait width (WCAG 2.5.5). The visible artwork is unchanged. |
 | Added the *Position along the path* slider | Keyboard equivalent of the mouse drag (WCAG 2.1.1). It drives the same state and the same ported snapping code, so behaviour is unchanged. |
 | Added the *Currently showing* readout | The spectrum type must not depend on reading the picture (WCAG 1.4.1, 1.1.1). |
 | Ghost telescope also shown while the slider has focus | Keyboard users get the same "where am I on the track" feedback that mouse users get from the drag. |

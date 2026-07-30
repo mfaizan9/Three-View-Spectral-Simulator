@@ -131,18 +131,24 @@ reader. It is recoloured — see ACCESSIBILITY.md.
 
 The original stage is a single 700 × 500 black field: spectrometer top-left,
 instruction paragraph top-right, the space scene across the middle and bottom.
-The KL-UNL version keeps that arrangement as three panels —
+The KL-UNL version presents the same content as **two side-by-side panels** —
 
-* **Spectrometer** (top-left) — the instrument, plus a "Currently showing:" readout,
-* **How to Use This Demonstrator** (top-right) — the verbatim instruction text,
-* **Space View** (full width, below) — the scene and the telescope position control,
+* **Space View** (left) — the scene and the telescope position control,
+* **Spectrometer** (right) — the instrument, plus a "Currently showing:" readout,
 
 — using `.app-shell`, `.app-layout`, `.panel`, `.panel__heading`,
 `.panel__canvas-wrap`, `.control-fieldset` and `.control-row__slider` from the
-foundation. Below 56 rem the foundation's own breakpoint collapses the layout to
-a single column, and the panels are re-ordered to **Space View → Spectrometer →
-How to Use** (CSS `order` in `styles/styles.css`) so that on a phone the thing the
-user operates comes first; see ACCESSIBILITY.md for why that reorder is safe.
+foundation. Below 56 rem the foundation's own breakpoint collapses this to a
+single column; DOM order is already Space View → Spectrometer, so the stack needs
+no CSS re-ordering and the visual order matches the reading order at every width.
+
+Side by side rather than stacked so that the whole demonstrator fits on one
+screen at default zoom without scrolling (measured: the page ends about 545 px
+down in a 1280 × 650 viewport). The space view additionally carries
+`max-width: max(18rem, calc((100vh - 15rem) * 1.625))` — because the `viewBox`
+fixes its 585 : 360 aspect ratio, capping the width also caps the height, so the
+layout still fits on a short viewport without ever letterboxing or distorting the
+diagram.
 
 The space-view SVG uses `viewBox="115 140 585 360"`, i.e. the original stage
 coordinate system cropped to the region the scene actually occupies (the top-left
@@ -153,8 +159,13 @@ identical at any display size or zoom level.
 
 **Divergences from the screenshot, and why:**
 
-* The original's white-on-black instruction text is now dark text on the KL-UNL
-  white panel background (foundation palette; Goal B outranks Goal C).
+* **The original's on-screen instruction paragraph is no longer on the page.** At
+  the user's request it was moved into the masthead **Help** dialog so the
+  demonstrator fits on one screen. The sentence is preserved verbatim as the first
+  paragraph of the Help text (see the contents.json section below). Trade-off worth
+  knowing: the instruction is now one click away instead of always visible; the
+  Help button is labelled "Review Help Guide" in green until it has been opened,
+  which is the foundation's own mechanism for drawing attention to it.
 * The wordmark colour changed for contrast (see ACCESSIBILITY.md).
 * A "Currently showing:" readout and a **Position along the path** slider were
   added. The readout exists so the spectrum type is not conveyed by picture
@@ -166,12 +177,25 @@ identical at any display size or zoom level.
 
 ## contents.json
 
-`foundation/contents.json` was copied in **byte-for-byte unchanged**: the shared
-file already contains a `threeviewsspectra` entry
+The shared file already contains a `threeviewsspectra` entry
 (`meta.title = "Three Views Spectrum Demonstrator"`, `meta.version = "2.0"`, plus
-Help and About text). No entry needed to be added, and nothing in the foundation
-was edited. `kl-unl-masthead.js`, `kl-unl.css` and `kl-unl.js` are byte-for-byte
-copies as well.
+Help and About text), so no new entry had to be created.
+
+**One content change was made to the per-sim copy in `html5/foundation/`:**
+`masthead.help.content` was extended so that the original's on-screen instruction
+sentence — which used to be a panel on the page — is not lost. The verbatim
+sentence was prepended, and a keyboard note appended; the existing middle
+paragraph is untouched. Nothing else in the 112-entry file changed (the edit was a
+targeted string replacement, not a re-serialisation), and `meta`, `about`,
+`kl-unl-masthead.js`, `kl-unl.css` and `kl-unl.js` are all byte-for-byte as
+shipped.
+
+**To bring the shared `foundation/contents.json` into line, replace the
+`threeviewsspectra` → `masthead` → `help` → `content` string with:**
+
+```json
+"content": "<p>Drag the telescope around to see how the three main types of spectra (continuous, absorption, and emission) are obtained from a cold, thin gas cloud and an incandescent lightbulb in space.</p><p>This demonstrator shows how different spectra can arise from a light bulb (a thermal source) and a cold, thin gas cloud. The spectrometer shows emission, absorption, or continuous spectra based on where the draggable telescope is pointed.</p><p>The telescope can also be moved from the keyboard: use the <strong>Position along the path</strong> slider beside the space view, or click the telescope once and then use the arrow keys.</p>"
+```
 
 ---
 
